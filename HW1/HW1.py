@@ -15,7 +15,7 @@ def func_left (x, m):  #Here x = sin(phi) in the dispersion equ (1.14)
     return np.tan(k * n1 * a *  x - (m * np.pi) / 2)
 def func_right (x):
     return np.sqrt((2 * delta / (x ** 2)) - 1)
-points = np.arange(0, interval, 1E-6)
+points = np.arange(1E-12, interval, 1E-8)
 result_left = []
 result_right = []
 intersection_y = []
@@ -24,7 +24,7 @@ for i in range(interval_num):
     result_left.append(func_left(points + i * interval, i))
     result_right.append(func_right(points + i * interval))
     for idx in range(len(result_left[i])): #Find intersection
-        if (abs(result_left[i][idx] - result_right[i][idx]) < 1e-3):
+        if (abs(result_left[i][idx] - result_right[i][idx]) < 1e-4):
             intersection_y.append(result_left[i][idx])
             intersection_x.append(points[idx] + i * interval)
             break
@@ -33,12 +33,13 @@ for i in range(interval_num):
     plt.plot(points + i * interval, func_left(points + i * interval, i), 'k')
     plt.plot(points + i * interval, func_right(points + i * interval), 'k')
 intersection_x_round = [round(number, 3) for number in intersection_x]
-cos_phi = [round(np.cos(np.arcsin(number)), 3) for number in intersection_x] # Find cos phi
+cos_phi = [np.cos(np.arcsin(number)) for number in intersection_x] # Find cos phi
 beta = []
 beta = [round(number * k * n1, 3) for number in cos_phi]
-print(intersection_x_round)
+cos_phi = [round(number, 3) for number in cos_phi]
+print(cos_phi)
 print(beta)
 plt.xlim([0, interval * interval_num])
 plt.ylim([0, 15])
 plt.xlabel(r"sin $\phi$")
-plt.show()
+#plt.show()
